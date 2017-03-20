@@ -31,4 +31,4 @@ Python3 and OpenCV3 are the versions being used in this Project.
 
 **Step 2:** Run through the code till the code block **"Improve the draw_lines() function"**.  The output of the project are two videos located in /test_video_output directory.
 
-**Note:** Due to time limitation, the challenging task is not handled yet. Hopefully I could finish it after my travel this week.
+**Note:** Due to time limitation, the challenging task is not handled yet. Hopefully I could finish it after my trip this week.
