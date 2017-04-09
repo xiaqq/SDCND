@@ -122,6 +122,8 @@ Here are five German traffic signs that I found on the web. I used image editor 
 ![alt text](web_images_resized/image4_resize.jpg)
 ![alt text](web_images_resized/image5_resize.jpg)
 
+The first and last images could be difficult to classify since it has rather complex symbol(car and working people) inside the triangle. The third image might also be difficult to classify because there are something on the background. The second one could be difficult since there are a lot other similar traffic signs only with different limit speed. All five images have rather low image resolution.
+
 
 ####2. Prediction of the new images
 
@@ -138,7 +140,9 @@ Here are the results of the prediction:
 | Road work			| Right-of-way at the next intersection     							|
 
 
-The model was able to correctly predict 4 out of 5 new downloaded traffic sign images, which gives an prediction accuracy of 80%.
+The model was able to correctly predict 4 out of 5 new downloaded traffic sign images, which gives an prediction accuracy of 80%. This compares favorably to the accuracy on the test set of 94%. Since we have very small new dataset of 5 images, and the model only predict one wrongly. This is pretty good results and correspondence with the accuracy on the previous test set.  
+
+
 
 ####3. Softmax probabilities of the five new images
 
