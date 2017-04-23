@@ -104,8 +104,6 @@ def generator_data(data, angle, batch_size):
 
         yield batch_train, batch_angle
         
-### PART 3: TRAINING ###
-
 data_generator = generator_data(X_train,y_train,128)
 valid_generator = generator_data(X_valid, y_valid, 128)
 
