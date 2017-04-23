@@ -31,6 +31,7 @@ My project includes the following files:
 * model.py containing the script to create and train the model
 * drive.py for driving the car in autonomous mode
 * model.h5 containing a trained convolution neural network
+* run.mp4 video recording of my autonomous car running for a lap
 * writeup.md summarizing the results
 
 ####2. Submission includes functional code
