@@ -18,8 +18,8 @@ from sklearn.model_selection import train_test_split
 
 import math
 ##read all the necessary samples: left, center and right camera
-colnames = ['center', 'left', 'right', 'steering', 'throttle', 'brake', 'speed']
-data = pandas.read_csv('driving_log.csv', skiprows=[0], names=colnames)
+column= ['center', 'left', 'right', 'steering', 'throttle', 'brake', 'speed']
+data = pandas.read_csv('driving_log.csv', skiprows=[0], names=column)
 center = data.center.tolist()
 left = data.left.tolist()
 right = data.right.tolist()
