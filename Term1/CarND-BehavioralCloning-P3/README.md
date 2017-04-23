@@ -15,7 +15,7 @@ To meet specifications, the project will require submitting five files:
 * drive.py (script to drive the car - feel free to modify this file)
 * model.h5 (a trained Keras model)
 * writeup.md (a report writeup file)
-* video.mp4 (a video recording of the vehicle driving autonomously around the track for one full lap)
+* run.mp4 (a video recording of the vehicle driving autonomously around the track for one full lap)
 
 This README file describes how to output the video in the "Details About Files In This Directory" section.
 
@@ -40,16 +40,16 @@ The lab enviroment can be created with CarND Term1 Starter Kit. Click [here](htt
 Usage of `drive.py` requires the saved the trained model model.h5. it can be used with drive.py using this command:
 
 ```sh
-python drive.py model.h5
+python3 drive.py model.h5
 ```
 
 The above command will load the trained model and use the model to make predictions on individual images in real-time and send the predicted angle back to the server via a websocket connection. The drive.py files is modified to match the crop image size in the model.py.
 
 To save a video recording, using this command:
 ```sh
-python drive.py model.h5 run1
+python3 drive.py model.h5 run1
 ```
-he fourth argument `run1` is the directory to save the images seen by the agent to. If the directory already exists it'll be overwritten.
+The fourth argument `run1` is the directory to save the images seen by the agent to. If the directory already exists it'll be overwritten.
 
 Note: There is known local system's setting issue with replacing "," with "." when using drive.py. When this happens it can make predicted steering values clipped to max/min values. If this occurs, a known fix for this is to add "export LANG=en_US.utf8" to the bashrc file.
 
