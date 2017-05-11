@@ -93,9 +93,11 @@ Here's a [link to my video result](./project_video_output.mp4). Each frame is go
 
 ### Discussion
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Briefly discuss any problems and issues I faced in the implementation of this project.
 
 In this project more advanced computer vision techniques are used. The color and gradient thresholding is very effective, although found the right combination from different color space and gradient direction could take many experiment and time. The histogram and sliding window approach is very effective and powerful. Since for a video, once we found the lanes position in one frame, we could reuse it and search the lanes in the next frames in a margin area. This is implemented in the
-10th code cell.
+10th code cell. I also averaged the lane pixels of last 10 frames to assign to current frame, so that it will smooth the output video.
 
 However if the background noise/color is not very similar to the lanes color then the color space threshold could fail. Also if the color of the lane itself is very weak, then to let them stand out could also be very challenging.
+
+To make it more robust, more experiment with the color and gradient thresholding may help. More advanced computer vision techniques should be investigated. 
