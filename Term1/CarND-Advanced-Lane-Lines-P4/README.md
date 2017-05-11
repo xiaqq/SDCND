@@ -18,6 +18,8 @@ The images for camera calibration are stored in the folder called `camera_cal`. 
 
 Examples of the output from each stage of the pipeline in the folder called `ouput_images`. The video output called `project_video_output.mp4` is the result video processed by the pipeline.
 
+Following are some example images from the pipeline stages. More details one may find it in the writeup.md
+
 **distorted chessboard**
 ![chessboard_distorted](./output_images/chessboard_distorted.png)
 
