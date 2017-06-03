@@ -96,6 +96,6 @@ Here's an example result showing the heatmap from a series of test images, the r
 
 ###Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+####1. Briefly discuss any problems I faced in the implementation of this project.  Where will the pipeline likely fail?  What could I do to make it more robust?
 
-The pipeline could fail if it needs a real time detection since the processing time is pretty slow (at least with my computer). With parameters fine tuning of the hog features and the sliding window as well as threshold of the heatmap could improve the robustness of the detection. Another approach would be using the deep learning neural network instead of SVM. It would be interesting to try it out and compare it with the SVM approach.  
+The most difficulty part is the fine tuning the parameters to get a reasonable results. It needs several iterative runs. To totally eliminate the false positive is also very challenging. The pipeline could fail if it needs a real time detection since the processing time is pretty slow (at least with my computer). With parameters fine tuning of the hog features and the sliding window as well as threshold of the heatmap could improve the robustness of the detection. Another approach would be using the deep learning neural network instead of SVM. It would be interesting to try it out and compare it with the SVM approach.  
