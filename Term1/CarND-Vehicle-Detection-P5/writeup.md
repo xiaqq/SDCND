@@ -69,7 +69,7 @@ Here's an example result showing the heatmap from a series of test images and th
 ![findingcar_heatmaps](./output_images/findingcar_heatmaps.png)
 
 ![test_image3](./test_images/test3.png)
-![test_image_prediction](./output_images/image3_singlebox.png)
+![test_image_prediction](./output_images/image3_beforeheatmap.png)
 ![car_heatmaps](./output_images/image3_heatmap.png)
 
 ![test_image4](./test_images/test4.png)
