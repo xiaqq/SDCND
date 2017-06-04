@@ -44,7 +44,9 @@ I trained a linear SVM using sklearn libraries. I first split the car and not ca
 
 ####1. The implementation of sliding window and prediction.
 
-I decided to restrict the search area by defining the start and stop y position as 400 and 700 respectively, since only there the cars possibly appear. And then using the Hog Sub-sampling Window Search method learned from the lectures to do window sliding on the restricted area. This approach allow us to extract the hog image only once and then sub-sampled to get all of its overlaying windows. The overlapping area of two sliding windows is defined by the number of cell distance. In my case the cell distance is 2 and for a 8x8 window size, it means a 75% overlapping. By feeding the extracted spatial binned color, color histogram features and the hog sub-sample hog features of each sub-frame to the trained classifier, a prediction of car/no car could be made. This implementation is found in the fourth code cell in "P5.ipynb".
+I decided to restrict the search area by defining the start and stop y position as 400 and 700 respectively, since only there the cars possibly appear. And then using the Hog Sub-sampling Window Search method learned from the lectures to do window sliding on the restricted area. This approach allow us to extract the hog image only once and then sub-sampled to get all of its overlaying windows. The overlapping area of two sliding windows is defined by the number of cell distance. I also used four different scales to help detect car object with different sizes(near versus far away cars ).By feeding the extracted spatial binned color, color histogram features and the hog sub-sample hog features of each sub-frame to the trained classifier, a prediction of car/no car could be made.
+
+This implementation is found in the fourth code cell in "P5.ipynb".
 
 ![findingcar_slidewindows.png](./output_images/findingcar_slidewindows.png)
 
@@ -55,19 +57,11 @@ Ultimately I used YCrCb 3-channel HOG features plus spatially binned color and h
 ![findingcar_slidewindows1.png](./output_images/image1_beforeheatmap.png)
 ![findingcar_slidewindows2.png](./output_images/image4_beforeheatmap.png)
 ---
+####3. Filtering the false positives and combining overlapping bounding boxes.
 
-### Video Implementation
+From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions. A heatmap is created by adding a value 1 to a detected region. Several detected region with overlapping windows, we'll have high heat number of that region. I make   I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  To filtering out the false positive, I set a heatmap threshold to 2 to rule out the region with low heat number, which most likely a false positive detection.
 
-####1. The final video output
-
-The video is called project_video_output.mp4 in the same directory of the writeup file.
-
-####2. Filtering the false positives and combining overlapping bounding boxes.
-
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
-
-Here's an example result showing the heatmap from a series of test images, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
-
+Here's an example result showing the heatmap from a series of test images and the result of `scipy.ndimage.measurements.label()`.
 
 ### Here are three test images and their corresponding heatmaps:
 ![test_image1](./test_images/test1.png)
@@ -88,6 +82,14 @@ Here's an example result showing the heatmap from a series of test images, the r
 ![test3_singlebox](./output_images/image3_singlebox.png)
 
 ![test4_singlebox](./output_images/image4_singlebox.png)
+
+### Video Implementation
+
+####1. The final video output
+
+The video is save as project_video_output.mp4. To make the detection more smoothly, I accumulated the last 30 frames's heatmap values as current frame heat value and use a  threshold of 25 for the current frame detection.
+
+Here's an example result showing the bounding boxes then overlaid on the last frame of video:
 
 ### Here the resulting bounding boxes are drawn onto the last frame in the video:
 ![test4_singlebox](./output_images/last_frame.png)
