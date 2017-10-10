@@ -13,7 +13,7 @@ public:
   } sensor_type_;
 
   Eigen::VectorXd raw_measurements_;
-  Eigen::VectorXd gt_values_;
+
 
 };
 
