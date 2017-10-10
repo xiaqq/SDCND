@@ -54,9 +54,12 @@ UKF::UKF() {
 	 Hint: one or more values initialized above might be wildly off...
 	 */
 
-	P_ << 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1;
+
+
 	n_x_ = 5; //CTRV model
 	n_aug_ = 7;
+	//P_ << 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1;
+	P_ = MatrixXd::Identity(n_x_, n_x_);
 	weights_ = VectorXd(2 * n_aug_ + 1);
 
 	Xsig_pred_ = MatrixXd(n_x_, 2 * n_aug_ + 1);
@@ -136,12 +139,14 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 	cout << "Prediction" << endl;
 	Prediction(delta_t);
 
-	if (meas_package.sensor_type_ == MeasurementPackage::RADAR && use_radar_ == true){
+	if (meas_package.sensor_type_ == MeasurementPackage::RADAR
+			&& use_radar_ == true) {
 		cout << "radar Update" << endl;
 		UpdateRadar(meas_package);
 	}
 
-	else if (meas_package.sensor_type_ == MeasurementPackage::LASER && use_laser_ == true){
+	else if (meas_package.sensor_type_ == MeasurementPackage::LASER
+			&& use_laser_ == true) {
 		cout << "lidar Update using EKF" << endl;
 		UpdateLidar(meas_package);
 	}
@@ -168,9 +173,13 @@ void UKF::GenerateSigmal() {
 	lambda_ = 3 - n_aug_;
 
 	//create augmented mean state
-	x_aug.head(5) = x_;
-	x_aug(5) = 0;
-	x_aug(6) = 0;
+	//x_aug.head(5) = x_;
+	//x_aug(5) = 0;
+	//x_aug(6) = 0;
+
+	x_aug.head(n_x_) = x_;
+	x_aug(n_x_) = 0;
+	x_aug(n_x_ + 1) = 0;
 	cout << "x_aug init finished" << endl;
 
 	//create augmented covariance matrix
@@ -254,16 +263,19 @@ void UKF::Prediction(double delta_t) {
 	// set weights
 	double weight_0 = lambda_ / (lambda_ + n_aug_);
 	weights_(0) = weight_0;
-	for (int i = 1; i < 2 * n_aug_ + 1; i++) {  //2n+1 weights
+	/*for (int i = 1; i < 2 * n_aug_ + 1; i++) {  //2n+1 weights
 		double weight = 0.5 / (n_aug_ + lambda_);
 		weights_(i) = weight;
-	}
+	}*/
+	weights_.fill(0.5 / (lambda_ + n_aug_));
+	weights_(0) = lambda_/(lambda_ + n_aug_);
 
 	//predicted state mean
-	x_.fill(0.0);
-	for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //iterate over sigma points
+	//x_.fill(0.0);
+	/*for (int i = 0; i < 2 * n_aug_ + 1; i++) {  //iterate over sigma points
 		x_ = x_ + weights_(i) * Xsig_pred_.col(i);
-	}
+	}*/
+	x_ = Xsig_pred_ * weights_;
 
 	//predicted state covariance matrix
 	P_.fill(0.0);
