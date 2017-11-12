@@ -19,7 +19,7 @@ Self-Driving Car Engineer Nanodegree Program
   * Run either `./install-mac.sh` or `./install-ubuntu.sh`.
   * If you install from source, checkout to commit `e94b6e1`, i.e.
     ```
-    git clone https://github.com/uWebSockets/uWebSockets 
+    git clone https://github.com/uWebSockets/uWebSockets
     cd uWebSockets
     git checkout e94b6e1
     ```
@@ -33,7 +33,7 @@ There's an experimental patch for windows in this [PR](https://github.com/udacit
 1. Clone this repo.
 2. Make a build directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./pid`. 
+4. Run it: `./pid`.
 
 Tips for setting up your environment can be found [here](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/23d376c7-0195-4276-bdf0-e02f1f3c665d)
 
@@ -93,6 +93,15 @@ that's just a guess.
 One last note here: regardless of the IDE used, every submitted project must
 still be compilable with cmake and make./
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
 
+
+##Reflections
+
+* PID
+1. P: Proportional Controller. This controller only consider the errors between the set point and process variable. Its parameter Kp gives the response to the error signal. In general, increasing the proportional gain will increase the speed of the control system response. However, if it is too large, the process variable will begin to oscillate and eventually the control system will out of control.
+2. I: Integral Controller.This controller consider the cumulative error over time. This is usually used if there is a systematic bias and we're not approaching our desired set point.
+used when we see that there is a systematic bias wherein we are not converging to our desired set point.
+3. D: Derivative Controller.This controller consider how rate of change of the process variable.The closer the process variable towards to set point, the slower the controller will change the process variable. This will avoid overshooting. However if it's too large, it will take a lot longer to reach the set point.
+
+* Tuning the parameter.
+I used manual tuning to tune the parameters. First I set Kd and Ki as zero and only slowly increase Kp till the car doesn't drive off the road for about 10s despite strong oscillation. Then I start increase the Kd till the car could relatively smoothly go through the road despite some overshoot. Then add very small Ki to make it even more smoothly.
