@@ -48,61 +48,95 @@ is the vehicle starting offset of a straight line (reference). If the MPC implem
 4.  Tips for setting up your environment are available [here](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/23d376c7-0195-4276-bdf0-e02f1f3c665d)
 5. **VM Latency:** Some students have reported differences in behavior using VM's ostensibly a result of latency.  Please let us know if issues arise as a result of a VM environment.
 
-## Editor Settings
+##Project Summary
 
-We've purposefully kept editor configuration files out of this repo in order to
-keep it as simple and environment agnostic as possible. However, we recommend
-using the following settings:
+1. Model Variables and cost function.
 
-* indent using spaces
-* set tab width to 2 spaces (keeps the matrices in source code aligned)
 
-## Code Style
+ The Variables in the MPC model consists of states and actuators. The states are: x, y, psi,v,cte and espi, where x,y,psi is the coordination and orientation of the vehicle, and the cte and espi are the cross check error and orientation error respectively. the actuators are delta and a, where delta is the steering angle and a is the acceleration.
 
-Please (do your best to) stick to [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html).
+ The cost function is named as fg and its 0th element contains the sum of all the calculated results. The car's behavior in the simulator determined by the cost function value. Some of the parameters are penalized and wights for those parameters shown below.
 
-## Project Instructions and Rubric
+ // The part of the cost based on the reference state.
+	     for (int t = 0; t < N; t++) {
+	       fg[0] += 2000*CppAD::pow(vars[cte_start + t], 2);
+	       fg[0] += 2000*CppAD::pow(vars[epsi_start + t], 2);
+	       fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2);
+	     }
 
-Note: regardless of the changes you make, your project must be buildable using
-cmake and make!
+	     // Minimize the use of actuators.
+	     for (int t = 0; t < N - 1; t++) {
+	       fg[0] += CppAD::pow(vars[delta_start + t], 2);
+	       fg[0] += CppAD::pow(vars[a_start + t], 2);
+	     }
 
-More information is only accessible by people who are already enrolled in Term 2
-of CarND. If you are enrolled, see [the project page](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/f1820894-8322-4bb3-81aa-b26b3c6dcbaf/lessons/b1ff3be0-c904-438e-aad3-2b5379f0e0c3/concepts/1a2255a0-e23c-44cf-8d41-39b8a3c8264a)
-for instructions and the project rubric.
+	     // Minimize the value gap between sequential actuations.
+	     for (int t = 0; t < N - 2; t++) {
+	       fg[0] += 1500*CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+	       fg[0] += CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
+	     }
 
-## Hints!
+ 2. Kinetic model and the constraints
 
-* You don't have to follow this directory structure, but if you do, your work
-  will span all of the .cpp files here. Keep an eye out for TODOs.
+ x_(t+1) = x_t + v_t * cos(psi_t) * dt
+ y_(t+1) = y_t + v_t * sin(psi_t) * dt
+ psi_(t+1) = psi_t + v_t * delta_t * dt / Lf
+ v_(t+1) = v_t + a_t * dt
+ cte_(t+1) = f(x_t) - y_t + (v_t * sin(epsi_t) * dt)
+ epsi_(t+1) = psi_t - des_psi_t + (v_t/L_f) * delta_t * dt
 
-## Call for IDE Profiles Pull Requests
+ dt is the timestep. Lf is the distance between front wheels to center of gravity. f(x_t) is the trajectory determined by polynomanial line of waypoints. des_psi_t is the arctan of f(x_t) slope.
+ From the equations above, the constraints for the model can be set up as following:
 
-Help your fellow students!
+ for (int i = 1; i < N; i++) {
+      // State at time t+1
+      AD<double> x1 = vars[x_start + i];
+      AD<double> y1 = vars[y_start + i];
+      AD<double> psi1 = vars[psi_start + i];
+      AD<double> v1 = vars[v_start + i];
+      AD<double> cte1 = vars[cte_start + i];
+      AD<double> epsi1 = vars[epsi_start + i];
 
-We decided to create Makefiles with cmake to keep this project as platform
-agnostic as possible. Similarly, we omitted IDE profiles in order to we ensure
-that students don't feel pressured to use one IDE or another.
+      // State at time t
+      AD<double> x0 = vars[x_start + i - 1];
+      AD<double> y0 = vars[y_start + i - 1];
+      AD<double> v0 = vars[v_start + i - 1];
+      AD<double> psi0 = vars[psi_start + i - 1];
+      AD<double> cte0 = vars[cte_start + i - 1];
+      AD<double> epsi0 = vars[epsi_start + i - 1];
 
-However! I'd love to help people get up and running with their IDEs of choice.
-If you've created a profile for an IDE that you think other students would
-appreciate, we'd love to have you add the requisite profile files and
-instructions to ide_profiles/. For example if you wanted to add a VS Code
-profile, you'd add:
+      // Actuator at time t
+      AD<double> delta0 = vars[delta_start + i - 1];
+      AD<double> a0 = vars[a_start + i - 1];
 
-* /ide_profiles/vscode/.vscode
-* /ide_profiles/vscode/README.md
+      AD<double> f0 = coeffs[0] + coeffs[1] * x0 + coeffs[2] * pow(x0, 2) + coeffs[3] * pow(x0, 3);
+      AD<double> psides0 = CppAD::atan(coeffs[1] + 2 * coeffs[2] * x0 + 3 * coeffs[3] * x0 * x0);
 
-The README should explain what the profile does, how to take advantage of it,
-and how to install it.
+      // Constraints
+      fg[1 + x_start + i] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
+      fg[1 + y_start + i] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
+      fg[1 + psi_start + i] = psi1 - (psi0 - v0 * delta0 * dt / Lf);
+      fg[1 + v_start + i] = v1 - (v0 + a0 * dt);
+      fg[1 + cte_start + i] = cte1 - (f0 - y0 + v0 * CppAD::sin(epsi0) * dt);
+      fg[1 + epsi_start + i] = epsi1 - (psi0 - psides0 - v0 * delta0 * dt / Lf);
+    }
 
-Frankly, I've never been involved in a project with multiple IDE profiles
-before. I believe the best way to handle this would be to keep them out of the
-repo root to avoid clutter. My expectation is that most profiles will include
-instructions to copy files to a new location to get picked up by the IDE, but
-that's just a guess.
+3. Latency
+In a real car, an actuation command won't execute instantly - there will be a delay as the command propagates through the system. A realistic delay might be on the order of 100 milliseconds.
 
-One last note here: regardless of the IDE used, every submitted project must
-still be compilable with cmake and make./
+This is a problem called "latency", and it's a difficult challenge for some controllers - like a PID controller - to overcome. But a Model Predictive Controller can adapt quite well because we can model this latency in the system. The code to update the states is as following:
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+// Predicting 100 ms in the future.
+
+    double latency = 0.1;
+    const double Lf = 2.67;
+    state[0] = v*cos(0) * latency;
+    state[1] = v*sin(0) * latency;
+    state[2] = (-v*steer_value*latency/Lf);
+    state[3] = v + throttle_value*latency;
+    state[4] = cte + v*sin(epsi) * latency;
+    state[5] = epsi - (v/Lf) * steer_value * latency;
+
+4. Choose N and dt values
+
+I started with N = 20 and dt = 0.5. By having this large N the car got off the track. Since large N and dt cause large computation effort and slower the prediction, I started decreasing the N and dt. After a couple of rounds of trial and errors, with N=10 and  dt=0.15 it get the best results.
