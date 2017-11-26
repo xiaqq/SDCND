@@ -92,13 +92,19 @@ The following equations describe the kinetic model used in the MPC.
   epsi_(t+1) = psi_t - des_psi_t + (v_t/L_f) * delta_t * dt;
 
  dt is the timestep. Lf is the distance between front wheels to center of gravity. f(x_t) is the trajectory determined by polynomanial line of waypoints. des_psi_t is the arctan of f(x_t) slope.
- From the equations above, the constraints for the model can be set up as following:
+ The constraints therefore for the model can be set up as following:
+
 
  for (int i = 1; i < N; i++) {
-      // State at time t+1
+
+
+
       AD<double> x1 = vars[x_start + i];
+
       AD<double> y1 = vars[y_start + i];
+
       AD<double> psi1 = vars[psi_start + i];
+
       AD<double> v1 = vars[v_start + i];
       AD<double> cte1 = vars[cte_start + i];
       AD<double> epsi1 = vars[epsi_start + i];
