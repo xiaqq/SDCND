@@ -56,7 +56,8 @@ is the vehicle starting offset of a straight line (reference). If the MPC implem
  The cost function is named as fg and its 0th element contains the sum of all the calculated results. The car's behavior in the simulator determined by the cost function value. Some of the parameters are penalized and wights for those parameters shown below.
 
  // The part of the cost based on the reference state.
-	     for (int t = 0; t < N; t++) {
+
+       for (int t = 0; t < N; t++) {
 	       fg[0] += 2000*CppAD::pow(vars[cte_start + t], 2);
 	       fg[0] += 2000*CppAD::pow(vars[epsi_start + t], 2);
 	       fg[0] += CppAD::pow(vars[v_start + t] - ref_v, 2);
