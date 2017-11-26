@@ -49,7 +49,7 @@ is the vehicle starting offset of a straight line (reference). If the MPC implem
 5. **VM Latency:** Some students have reported differences in behavior using VM's ostensibly a result of latency.  Please let us know if issues arise as a result of a VM environment.
 
 ##Project Summary
-1. Model Variables and cost function.
+1. Model Variables and cost function
 
  The Variables in the MPC model consists of states and actuators. The states are: x, y, psi,v,cte and espi, where x,y,psi is the coordination and orientation of the vehicle, and the cte and espi are the cross check error and orientation error respectively. the actuators are delta and a, where delta is the steering angle and a is the acceleration.
 
@@ -134,6 +134,7 @@ The following equations describe the kinetic model used in the MPC.
     }
 
 3. Latency
+
 In a real car, an actuation command won't execute instantly - there will be a delay as the command propagates through the system. A realistic delay might be on the order of 100 milliseconds.
 
 This is a problem called "latency", and it's a difficult challenge for some controllers - like a PID controller - to overcome. But a Model Predictive Controller can adapt quite well because we can model this latency in the system. The code to update the states is as following:
