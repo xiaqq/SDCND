@@ -49,9 +49,7 @@ is the vehicle starting offset of a straight line (reference). If the MPC implem
 5. **VM Latency:** Some students have reported differences in behavior using VM's ostensibly a result of latency.  Please let us know if issues arise as a result of a VM environment.
 
 ##Project Summary
-
 1. Model Variables and cost function.
-
 
  The Variables in the MPC model consists of states and actuators. The states are: x, y, psi,v,cte and espi, where x,y,psi is the coordination and orientation of the vehicle, and the cte and espi are the cross check error and orientation error respectively. the actuators are delta and a, where delta is the steering angle and a is the acceleration.
 
@@ -76,7 +74,7 @@ is the vehicle starting offset of a straight line (reference). If the MPC implem
 	       fg[0] += CppAD::pow(vars[a_start + t + 1] - vars[a_start + t], 2);
 	     }
 
- 2. Kinetic model and the constraints
+2. Kinetic model and the constraints
 
  x_(t+1) = x_t + v_t * cos(psi_t) * dt
  y_(t+1) = y_t + v_t * sin(psi_t) * dt
