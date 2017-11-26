@@ -77,12 +77,19 @@ is the vehicle starting offset of a straight line (reference). If the MPC implem
 
 2. Kinetic model and the constraints
 
- x_(t+1) = x_t + v_t * cos(psi_t) * dt
- y_(t+1) = y_t + v_t * sin(psi_t) * dt
- psi_(t+1) = psi_t + v_t * delta_t * dt / Lf
- v_(t+1) = v_t + a_t * dt
- cte_(t+1) = f(x_t) - y_t + (v_t * sin(epsi_t) * dt)
- epsi_(t+1) = psi_t - des_psi_t + (v_t/L_f) * delta_t * dt
+The following equations describe the kinetic model used in the MPC.
+
+  x_(t+1) = x_t + v_t * cos(psi_t) * dt;
+
+  y_(t+1) = y_t + v_t * sin(psi_t) * dt;
+
+  psi_(t+1) = psi_t + v_t * delta_t * dt / Lf;
+
+  v_(t+1) = v_t + a_t * dt;
+
+  cte_(t+1) = f(x_t) - y_t + (v_t * sin(epsi_t) * dt);
+
+  epsi_(t+1) = psi_t - des_psi_t + (v_t/L_f) * delta_t * dt;
 
  dt is the timestep. Lf is the distance between front wheels to center of gravity. f(x_t) is the trajectory determined by polynomanial line of waypoints. des_psi_t is the arctan of f(x_t) slope.
  From the equations above, the constraints for the model can be set up as following:
