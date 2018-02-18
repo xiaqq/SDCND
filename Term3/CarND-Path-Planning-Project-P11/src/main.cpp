@@ -283,18 +283,47 @@ int main() {
 
 								if(d<(2+4*(lane-1)+2) && d >(2+4*(lane-1)-2)) //cars in the left lane
 								{
-									if((abs(check_car_s-car_s)<25))
+									if(((15 < (check_car_s-car_s)) && ((check_car_s-car_s) < 25)) && (ref_vel > check_car_speed)) ////left front a close car and the car is slower
+									//if(((15 < (check_car_s-car_s)) && ((check_car_s-car_s) < 25)) ) //left front a close car
+									{
 
+										left_occupied = true;
+
+									}
+									else if (((-15>(check_car_s-car_s)) && ((check_car_s-car_s)> -25)) && (ref_vel < check_car_speed)) ///left behind a close car and the car is faster
+									{
+
+										left_occupied = true;
+
+									}
+
+									else if ((abs(check_car_s-car_s)) <= 15)//too close to change the lane
 									{
 
 										left_occupied = true;
 
 									}
 								}
-								else if(lane<2 && d<(2+4*(lane+1)+2) && d >(2+4*(lane+1)-2)) //cars in the right lane
+								else if(lane<2 && d<(2+4*(lane+1)+2) && d >(2+4*(lane+1)-2) ) //cars in the right lane
 								{
-									if((abs(check_car_s-car_s)<25))
 
+									if(((15 < (check_car_s-car_s)) && ((check_car_s-car_s) < 25)) && (ref_vel > check_car_speed)) //right front a close car and the car is slower
+
+									//if(((15 < (check_car_s-car_s)) && ((check_car_s-car_s) < 25)) ) //right front a close car
+
+									{
+
+										right_occupied = true;
+
+									}
+									else if (((-15>(check_car_s-car_s)) && ((check_car_s-car_s)> -25)) && (ref_vel < check_car_speed)) ///right behind a close car and the car is faster
+									{
+
+										right_occupied = true;
+
+									}
+
+									else if ((abs(check_car_s-car_s)) <= 15)//too close to change the lane
 									{
 
 										right_occupied = true;
